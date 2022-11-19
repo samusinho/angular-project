@@ -36,14 +36,3 @@
         </ng-template>
     </p-table>
 </div>
-
-<p-dialog [(visible)]="display" [style]="{width: '60vw'}">
-    <ng-template pTemplate="header">
-        <h2>Información de partido político</h2>
-    </ng-template>
-    <app-party 
-    (closeModal)="display = false"
-    [id]="idSelected"
-    [isEditing]="isEditing"></app-party>
-</p-dialog>
-

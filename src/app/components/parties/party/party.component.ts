@@ -1,59 +1,64 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { SharedService } from 'src/app/services/shared.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-party',
   templateUrl: './party.component.html',
   styleUrls: ['./party.component.css']
 })
-export class PartyComponent implements OnInit, OnChanges {
+export class PartyComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private shared: SharedService
+    private shared: SharedService,
+    public config: DynamicDialogConfig,
+    public ref: DynamicDialogRef
   ) { }
 
   form: FormGroup;
-  @Input() id: string = null;
-  @Input() isEditing = false;
-  @Output() closeModal = new EventEmitter<Boolean>();
+  isEditing = false;
 
   ngOnInit(): void {
+    this.ref.onClose.subscribe({
+      next: ((response: any) => {
+        if (response) {
+          Swal.fire({
+            title: `Ahora el partido político se llama "${response.name}"`,
+            showCancelButton: false,
+            confirmButtonText: 'Aceptar',
+          })
+        }
+      })
+    })
+
+    const id = this.config.data.id;
+    this.isEditing = this.config.data.isEditing;
     this.form = this.fb.group({
       name: [null, Validators.required]
-    })
-  }
+    });
 
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes)
-    let id: any = changes['id'];
-    let isEditing: any = changes['isEditing'];
-
-    if (id && !id.firstChange) {
-      this.shared.getAll(`parties/${this.id}`).subscribe({
-        next: ((response: any) => {
-          if (this.form) this.form.get('name').setValue(response?.party?.name || '');
-        })
+    this.shared.get(`parties/${id}`).subscribe({
+      next: ((response: any) => {
+        if (this.form) this.form.get('name').setValue(response?.party?.name || '');
       })
-    }
+    });
 
-    if (isEditing && !isEditing.firstChange) {
-      if (this.form) {
-        if (isEditing.currentValue) { // true -> desde el componente padre se da click en editar
-          this.form.get('name').enable();
-        } else { // true -> desde el componente padre se da click en visualizar
-          this.form.get('name').disable();
-        }
-      }
-    }
+    this.form.get('name')[this.isEditing ? 'enable': 'disable']();
   }
 
   onSubmit() {
-
+    const id = this.config.data.id;
+    this.shared.put(`parties/${id}`, this.form.value).subscribe({
+      next: ((response: any) => {
+        this.ref.close(response);
+      })
+    })
   }
 
   close() {
-    this.closeModal.emit(false);
+    this.ref.close();
   }
 }

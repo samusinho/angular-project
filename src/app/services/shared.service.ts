@@ -16,8 +16,9 @@ export class SharedService {
 
 
 
-  post = (endPoint: string, body: any): Observable<any> => this.http.post<any>(`${this.url}/${endPoint}`, body)
-  getAll = (endPoint: string): Observable<any> => this.http.get<any>(`${this.url}/${endPoint}`)
+  post = (endPoint: string, body: any): Observable<any> => this.http.post<any>(`${this.url}/${endPoint}`, body);
+  get = (endPoint: string): Observable<any> => this.http.get<any>(`${this.url}/${endPoint}`);
+  put = (endPoint: string, body: any): Observable<any> => this.http.put<any>(`${this.url}/${endPoint}`, body);
 
   getItemFromLocalStorage(item: string) {
     return localStorage.getItem(item);
