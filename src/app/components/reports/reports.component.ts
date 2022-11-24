@@ -27,13 +27,17 @@ export class ReportsComponent implements OnInit {
 
   orderBy(param: string = "party") {
     const data: any = {
-      labels:[`Total de votaciones ${param == "candidate" ? "(Por Candidato)": "(Por partido)"}`],
+      labels:[
+        `Total de votaciones ${param == "candidate" ? "(Por Candidato)":
+        (param == "station" ? "(Por mesa de votación)": "(Por partido)")}`
+      ],
       datasets: []
     };
     const items: any = {};
     let cont = 0;
     for (let i of this.votes) {
-      const attr = param == "candidate" ? i.candidate.name : i.candidate.party.name;
+      const attr = param == "candidate" ? i.candidate.name : 
+      (param == "station" ? i.station.name : i.candidate.party.name);
       if (!items[attr]) {
         cont = 1;
         items[attr] = {
@@ -43,7 +47,7 @@ export class ReportsComponent implements OnInit {
           borderColor: ['rgb(255, 99, 132)'],
           borderWidth: 1
         }
-      } else { // candidato ya está en el objeto
+      } else { // candidato/partido/mesa ya está en el objeto
         cont++;
         items[attr]['data'] = [cont]
       }

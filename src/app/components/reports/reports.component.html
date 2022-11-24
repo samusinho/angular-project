@@ -1,7 +1,8 @@
 <div class="mt-5">
-    <h1>Resultados de la votación</h1>
-    <p>Puedes consultar los resultados por candidato y/o partido político</p>
     <div class="text-center">
+        <h1>Resultados de la votación</h1>
+        <p>Puedes consultar los resultados por candidato y/o partido político</p>
+        <br>
         <button 
         pButton 
         pRipple 
@@ -16,7 +17,15 @@
         type="button" 
         label="Por candidato" 
         class="p-button-outlined p-button-warning"
+        style="margin-right: 5px;"
         (click)="orderBy('candidate')"></button>
+        <button 
+        pButton 
+        pRipple 
+        type="button" 
+        label="Por Mesa" 
+        class="p-button-outlined p-button-danger"
+        (click)="orderBy('station')"></button>
     </div>
     <hr>
     <p-chart type="bar" [data]="data" *ngIf="data"></p-chart>
