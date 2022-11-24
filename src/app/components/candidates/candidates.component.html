@@ -4,10 +4,11 @@
         <button 
         pButton 
         type="button" 
+        label="Crear"
         class="p-button-primary create-button" 
         icon="pi pi-user-plus"
         (click)="create()"
-        >Crear</button>
+        ></button>
     </div>
     <p-table [value]="candidates" [paginator]="true" [rows]="5">
         <ng-template pTemplate="header">

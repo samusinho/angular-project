@@ -1,1 +1,25 @@
-<p>reports works!</p>
+<div class="mt-5">
+    <h1>Resultados de la votación</h1>
+    <p>Puedes consultar los resultados por candidato y/o partido político</p>
+    <div class="text-center">
+        <button 
+        pButton 
+        pRipple 
+        type="button" 
+        label="Por partido" 
+        style="margin-right: 5px;"
+        class="p-button-outlined p-button-success"
+        (click)="orderBy()"></button>
+        <button 
+        pButton 
+        pRipple 
+        type="button" 
+        label="Por candidato" 
+        class="p-button-outlined p-button-warning"
+        (click)="orderBy('candidate')"></button>
+    </div>
+    <hr>
+    <p-chart type="bar" [data]="data" *ngIf="data"></p-chart>
+</div>
+
+
